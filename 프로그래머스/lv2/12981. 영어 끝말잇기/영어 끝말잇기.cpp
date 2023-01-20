@@ -6,8 +6,7 @@ using namespace std;
 
 vector<int> solution(int n, vector<string> words) {
     unordered_set<string> s = {words[0]};
-    int cnt = words.size();
-    for(int i = 1; i < cnt; i++) {
+    for(int i = 1; i < words.size(); i++) {
         // 끝말잇기 체크, 중복 체크
         if(words[i - 1].back() != words[i][0] || s.count(words[i])) 
             return {i % n + 1, i / n + 1};
