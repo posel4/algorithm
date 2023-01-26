@@ -13,6 +13,6 @@ int count(int n) {
 
 int solution(int n) {
     int next = n;
-    while(count(n) != count(++next)) {}
+    while(count(n) != count(++next));
     return next;
 }
