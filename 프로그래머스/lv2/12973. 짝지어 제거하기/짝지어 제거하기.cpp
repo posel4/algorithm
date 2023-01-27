@@ -11,6 +11,5 @@ int solution(string s)
         if(!st.empty() && st.top() == c) st.pop();
         else st.push(c);
     }
-    if(!st.empty()) return 0;
-    else return 1;
+    return st.empty();
 }
