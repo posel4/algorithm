@@ -3,15 +3,19 @@
 
 using namespace std;
 
-vector<int> solution(int b, const int y) {
-    b /= 2;
-    int row = 3;
-    int col = b - 1;
-    for(int i = 2; i < b - 3; i++) {
-        if(i * (b - 2 - i) == y) {
-            row = i + 2;
-            col = b - i;
-        }
+vector<int> solution(const int b, const int y) {
+
+    int len = b / 2 + 2;
+
+    int row = len - 3;
+    int col = 3;
+
+    while(row >= col){
+        if(row * col == (b + y)) break;
+
+        row--;
+        col++;
     }
-    return {max(row, col), min(row, col)};
+
+    return {row, col};
 }
