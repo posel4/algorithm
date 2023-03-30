@@ -7,13 +7,9 @@ int main() {
         std::cin >> n;
         s[n] = true;
     }
-    bool f = false;
     for(int i = 1; i <= 30; i++) {
         if(!s[i]) {
-            std::cout << i;
-            if(!f)
-                std::cout << "\n";
-            f = true;
+            std::cout << i << "\n";
         } 
     }
 }
