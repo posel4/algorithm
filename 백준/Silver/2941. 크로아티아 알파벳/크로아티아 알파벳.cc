@@ -10,13 +10,9 @@ void replace(std::string t, std::string n) {
 
 int main() {
     std::cin >> s;
-    replace("c=", "A");
-    replace("c-", "B");
-    replace("dz=", "C");
-    replace("d-", "D");
-    replace("lj", "E");
-    replace("nj", "F");
-    replace("s=", "G");
-    replace("z=", "H");
+    std::string c[] = {"c=", "c-", "dz=", "d-", "lj", "nj", "s=", "z="};
+    for(auto e : c) {
+        replace(e, "A");
+    }
     std::cout << s.length();
 }
