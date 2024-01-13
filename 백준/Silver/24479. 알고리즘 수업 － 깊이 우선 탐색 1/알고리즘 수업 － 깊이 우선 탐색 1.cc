@@ -2,8 +2,8 @@
 #include<algorithm>
 
 std::vector<int> adj[100001];
-bool visited[100001] = {false, };
-int result[100001];
+bool visited[100001] = { false };
+int result[100001] = { 0 };
 int cnt = 0;
 
 void dfs(int here) {
