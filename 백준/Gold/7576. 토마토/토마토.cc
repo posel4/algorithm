@@ -15,8 +15,8 @@ int dy[4] = { 0, 1, 0 , -1 };
 int n, m, result = 0;
 int graph[MAX][MAX];
 
-bool is_map(int ny, int nx) {
-    return (0 <= nx && 0 <= ny && nx < m && ny < n);
+bool is_map(int there_y, int there_x) {
+    return (0 <= there_x && 0 <= there_y && there_x < m && there_y < n);
 }
 
 void bfs(void) {
