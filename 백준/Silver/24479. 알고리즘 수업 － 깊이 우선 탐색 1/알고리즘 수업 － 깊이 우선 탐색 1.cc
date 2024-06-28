@@ -1,4 +1,5 @@
-#include<iostream>
+#include <iostream>
+#include <vector>
 #include<algorithm>
 
 std::vector<int> adj[100001];
@@ -12,7 +13,7 @@ void dfs(int here) {
 
     for (int i = 0; i < adj[here].size(); i++) {
         int there = adj[here][i];
-        if(!visited[there])
+        if (!visited[there])
             dfs(there);
     }
 }
@@ -20,10 +21,10 @@ void dfs(int here) {
 int main() {
     std::cin.tie(0);
     std::cout.tie(0);
-    
+
     int n, m, r;
     std::cin >> n >> m >> r;
-    while(m--) {
+    while (m--) {
         int u, v;
         std::cin >> u >> v;
         adj[u].push_back(v);
