@@ -1,43 +1,51 @@
-#include<iostream>
-#include<algorithm>
+#include <iostream>
+#include <vector>
+#include <set>
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
+#define endl "\n"
 
-std::vector<int> adj[100001];
-bool visited[100001] = {false, };
-int result[100001];
-int cnt = 0;
+using namespace std;
+
+struct compare {
+    bool operator()(const int a, const int b) const {
+        return a > b;  // 내림차순
+    }
+};
+
+vector<multiset<int, compare>> adj;
+vector<int> visited;
+int n, m, r, cnt = 0;
 
 void dfs(int here) {
-    visited[here] = true;
-    result[here] = ++cnt;
-
-    for (int i = 0; i < adj[here].size(); i++) {
-        int there = adj[here][i];
+    visited[here] = ++cnt;
+    for(int there : adj[here]) {
         if(!visited[there])
             dfs(there);
     }
 }
 
-bool cmp(int a, int b) {
-    return a > b;
+void input() {
+    cin >> n >> m >> r;
+    adj.resize(n + 1);
+    visited.resize(n + 1);
+
+    while(m--) {
+        int u, v;
+        cin >> u >> v;
+        adj[u].insert(v);
+        adj[v].insert(u);
+    }
+}
+
+void print() {
+    for(int i = 1; i <= n; i++) {
+        cout << visited[i] << endl;
+    }
 }
 
 int main() {
-    std::cin.tie(0);
-    std::cout.tie(0);
-
-    int n, m, r;
-    std::cin >> n >> m >> r;
-    while(m--) {
-        int u, v;
-        std::cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
-    }
-    for (int i = 1; i <= n; i++) {
-        std::sort(adj[i].begin(), adj[i].end(), cmp);
-    }
+    fastio;
+    input();
     dfs(r);
-    for (int i = 1; i <= n; i++) {
-        std::cout << result[i] << "\n";
-    }
+    print();
 }
