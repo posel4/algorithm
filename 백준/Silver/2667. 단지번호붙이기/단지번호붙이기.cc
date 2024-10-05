@@ -1,64 +1,66 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 #define endl "\n"
+#define MAX 26
 
-const int MAX = 25;
-std::string inp[MAX];
-bool visited[MAX][MAX] = { false };
-std::vector<int> result;
-int cnt = 0;
+using namespace std;
 
-void bfs(int i, int j) {
+vector<vector<int>> adj;
+vector<vector<bool>> visited;
+vector<int> result;
+int n, cnt = 0;
+
+void dfs(int i, int j) {
     visited[i][j] = true;
     cnt++;
-    // left
-    if(0 < j && inp[i][j - 1] == '1' && !visited[i][j - 1]) {
-        bfs(i, j - 1);
+    if(i - 1 >= 0 && adj[i - 1][j] && !visited[i - 1][j]) {
+        dfs(i - 1, j);
     }
-    // right
-    if(j < MAX - 1 && inp[i][j + 1] == '1' && !visited[i][j + 1]) {
-        bfs(i, j + 1);
+    if(i + 1 < n && adj[i + 1][j] && !visited[i + 1][j]) {
+        dfs(i + 1, j);
     }
-    // up
-    if(0 < i && inp[i - 1][j] == '1' && !visited[i - 1][j]) {
-        bfs(i - 1, j);
+    if(j - 1 >= 0 && adj[i][j - 1] && !visited[i][j - 1]) {
+        dfs(i, j - 1);
     }
-    // down
-    if(i < MAX - 1 && inp[i + 1][j] == '1' && !visited[i + 1][j]) {
-        bfs(i + 1, j);
+    if(j + 1 < n && adj[i][j + 1] && !visited[i][j + 1]) {
+        dfs(i, j + 1);
+    }
+}
+
+void input() {
+    adj.resize(MAX, vector<int>(MAX));
+    visited.resize(MAX, vector<bool>(MAX));
+    for (int i = 0; i < n; i++) {
+        string row;
+        cin >> row;
+        for (int j = 0; j < n; j++) {
+            adj[i][j] = row[j] - '0';
+        }
+    }
+}
+
+void print() {
+    cout << result.size() << endl;
+    sort(result.begin(), result.end());
+    for(int i : result) {
+        cout << i << endl;
     }
 }
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(0);
-    std::cout.tie(0);
-
-    int n;
-    std::cin >> n;
-
-    for(int i = 0; i < n; ++i) {
-        std::cin >> inp[i];
-    }
-
-    for(int i = 0; i < n; ++i) {
-        for(int j = 0; j < n; ++j) {
-            if(inp[i][j] == '1' && !visited[i][j]) {
-                bfs(i, j);
-                result.emplace_back(cnt);
+    fastio;
+    cin >> n;
+    input();
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            if(adj[i][j] && !visited[i][j]) {
                 cnt = 0;
+                dfs(i, j);
+                result.push_back(cnt);
             }
         }
     }
-
-    int len = result.size();
-    std::cout << len << endl;
-    std::sort(result.begin(), result.end());
-    for(int i = 0; i < len; ++i) {
-        std::cout << result[i] << endl;
-    }
-
-    return 0;
+    print();
 }
