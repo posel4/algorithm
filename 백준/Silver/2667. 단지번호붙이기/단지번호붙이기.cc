@@ -1,66 +1,64 @@
 #include <iostream>
-#include <vector>
+#include <queue>
 #include <algorithm>
+#include <utility>
 #define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 #define endl "\n"
-#define MAX 26
 
 using namespace std;
+#define MAX 26
 
-vector<vector<int>> adj;
-vector<vector<bool>> visited;
+int n,cnt = 0;
+string arr[MAX];
+bool visited[MAX][MAX]={0,};
+int dx[4] = {1, -1, 0, 0};
+int dy[4] = {0, 0, 1, -1};
 vector<int> result;
-int n, cnt = 0;
+queue<pair<int,int>> q;
 
-void dfs(int i, int j) {
-    visited[i][j] = true;
+void bfs(int x,int y) {
+    q.push({x,y});
+    visited[x][y]=true;
     cnt++;
-    if(i - 1 >= 0 && adj[i - 1][j] && !visited[i - 1][j]) {
-        dfs(i - 1, j);
-    }
-    if(i + 1 < n && adj[i + 1][j] && !visited[i + 1][j]) {
-        dfs(i + 1, j);
-    }
-    if(j - 1 >= 0 && adj[i][j - 1] && !visited[i][j - 1]) {
-        dfs(i, j - 1);
-    }
-    if(j + 1 < n && adj[i][j + 1] && !visited[i][j + 1]) {
-        dfs(i, j + 1);
-    }
-}
 
-void input() {
-    adj.resize(MAX, vector<int>(MAX));
-    visited.resize(MAX, vector<bool>(MAX));
-    for (int i = 0; i < n; i++) {
-        string row;
-        cin >> row;
-        for (int j = 0; j < n; j++) {
-            adj[i][j] = row[j] - '0';
+    while(!q.empty()) {
+        int a = q.front().first;
+        int b = q.front().second;
+        q.pop();
+        for(int i = 0; i < 4; i++) {
+            int nx = a + dx[i];
+            int ny = b + dy[i];
+            if(0 <= nx && 0 <= ny && nx < n && ny < n &&
+                visited[nx][ny] == false && arr[nx][ny] == '1') {
+                q.push({nx,ny});
+                visited[nx][ny] = true;
+                cnt++;
+            }
         }
-    }
-}
-
-void print() {
-    cout << result.size() << endl;
-    sort(result.begin(), result.end());
-    for(int i : result) {
-        cout << i << endl;
     }
 }
 
 int main() {
     fastio;
     cin >> n;
-    input();
-    for(int i = 0; i < n; i++) {
+
+    for(int i = 0; i < n; i++)
+        cin >> arr[i];
+    
+    for (int i = 0; i < n; i++) {
         for(int j = 0; j < n; j++) {
-            if(adj[i][j] && !visited[i][j]) {
+            if(arr[i][j] == '1' && !visited[i][j]) {
                 cnt = 0;
-                dfs(i, j);
+                bfs(i,j);
                 result.push_back(cnt);
             }
         }
     }
-    print();
+
+    sort(result.begin(),result.end());
+    
+    cout << result.size() << endl;
+    for (int i = 0; i < result.size(); i++) {
+        cout << result[i] << endl;
+    }
 }
