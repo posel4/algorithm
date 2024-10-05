@@ -1,40 +1,45 @@
 #include <iostream>
 #include <vector>
-#include<algorithm>
+#include <set>
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
+#define endl "\n"
 
-std::vector<int> adj[100001];
-bool visited[100001] = { false };
-int result[100001] = { 0 };
-int cnt = 0;
+using namespace std;
+
+vector<multiset<int>> adj;
+vector<int> visited;
+int n, m, r, cnt = 0;
 
 void dfs(int here) {
-    visited[here] = true;
-    result[here] = ++cnt;
-
-    for (int i = 0; i < adj[here].size(); i++) {
-        int there = adj[here][i];
-        if (!visited[there])
+    visited[here] = ++cnt;
+    for(int there : adj[here]) {
+        if(!visited[there])
             dfs(there);
     }
 }
 
-int main() {
-    std::cin.tie(0);
-    std::cout.tie(0);
+void input() {
+    cin >> n >> m >> r;
+    adj.resize(n + 1);
+    visited.resize(n + 1);
 
-    int n, m, r;
-    std::cin >> n >> m >> r;
-    while (m--) {
+    while(m--) {
         int u, v;
-        std::cin >> u >> v;
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        cin >> u >> v;
+        adj[u].insert(v);
+        adj[v].insert(u);
     }
-    for (int i = 1; i <= n; i++) {
-        std::sort(adj[i].begin(), adj[i].end());
+}
+
+void print() {
+    for(int i = 1; i <= n; i++) {
+        cout << visited[i] << endl;
     }
+}
+
+int main() {
+    fastio;
+    input();
     dfs(r);
-    for (int i = 1; i <= n; i++) {
-        std::cout << result[i] << "\n";
-    }
+    print();
 }
