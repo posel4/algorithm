@@ -1,47 +1,46 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
+#define endl "\n"
 
-std::vector<int> adj[100001];
-bool discovered[100001] = {false };
-std::queue<int> q;
-int cnt = -1;
+using namespace std;
 
-void bfs(int start) {
-    discovered[start] = true;
-    q.push(start);
+vector<vector<int>> adj;
+vector<bool> visited;
+int n, m;
 
-    while(!q.empty()) {
-        int here = q.front();
-        q.pop();
-        ++cnt;
-        for(int i = 0; i < adj[here].size(); ++i) {
-            int there = adj[here][i];
-            if(!discovered[there]) {
-                q.push(there);
-                discovered[there] = true;
-            }
-        }
+void dfs(int here) {
+    visited[here] = true;
+    for(int there : adj[here]) {
+        if(!visited[there])
+            dfs(there);
     }
 }
 
-int main() {
-    std::cin.tie(0);
-    std::cout.tie(0);
-
-    int n, m;
-    int u, v;
-    std::cin >> n >> m;
+void input() {
+    cin >> n >> m;
+    adj.resize(n + 1);
+    visited.resize(n + 1);
 
     while(m--) {
-        std::cin >> u >> v;
+        int u, v;
+        cin >> u >> v;
         adj[u].push_back(v);
         adj[v].push_back(u);
     }
+}
 
-    bfs(1);
+void print() {
+    int cnt = 0;
+    for(int i = 1; i <= n; i++) {
+        if(visited[i]) cnt++;
+    }
+    cout << cnt - 1;
+}
 
-    std::cout << cnt;
-
-    return 0;
+int main() {
+    fastio;
+    input();
+    dfs(1);
+    print();
 }
