@@ -26,9 +26,8 @@ void dfs(int x, int y) {
 
 void input() {
     cnt = 0;
-    for (int i = 0; i < m; i++) {
-        fill(farm[i], farm[i] + n, 0);
-    }
+    fill(&farm[0][0], &farm[0][0] + MAX * MAX, 0);
+
     cin >> m >> n >> k;
     while(k--) {
         int i, j;
