@@ -1,67 +1,55 @@
 #include <iostream>
+#include <vector>
 #include <algorithm>
-#include <cstring>
-
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 #define endl "\n"
 #define MAX 50
 
-bool map[MAX][MAX];
-bool visited[MAX][MAX];
-int cnt = 0;
+using namespace std;
 
-void bfs(int i, int j) {
-    visited[i][j] = true;
-    // left
-    if(0 < j && map[i][j - 1] && !visited[i][j - 1]) {
-        bfs(i, j - 1);
+int t, m, n, k, cnt = 0;
+int dx[4] = {1, -1 , 0, 0};
+int dy[4] = {0, 0, 1, -1};
+int farm[MAX][MAX] = {0, };
+
+void dfs(int x, int y) {
+    farm[x][y] = 0; // visited
+
+    for(int i = 0; i < 4; i++) {
+        int nx = x + dx[i];
+        int ny = y + dy[i];
+        if(0 <= nx && nx < m && 0 <= ny && ny < n && farm[nx][ny]) {
+            dfs(nx, ny);
+        }
     }
-    // right
-    if(j < MAX - 1 && map[i][j + 1] && !visited[i][j + 1]) {
-        bfs(i, j + 1);
+}
+
+void input() {
+    cnt = 0;
+    for (int i = 0; i < m; i++) {
+        fill(farm[i], farm[i] + n, 0);
     }
-    // up
-    if(0 < i && map[i - 1][j] && !visited[i - 1][j]) {
-        bfs(i - 1, j);
-    }
-    // down
-    if(i < MAX - 1 && map[i + 1][j] && !visited[i + 1][j]) {
-        bfs(i + 1, j);
+    cin >> m >> n >> k;
+    while(k--) {
+        int i, j;
+        cin >> i >> j;
+        farm[i][j] = 1;
     }
 }
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(0);
-    std::cout.tie(0);
-
-    int t;
-    std::cin >> t;
-
-    while(t--) {
-        int m, n, k;
-        std::cin >> m >> n >> k;
-        cnt = 0;
-
-        std::memset(map, false, sizeof(map));
-        std::memset(visited, false, sizeof(visited));
-
-        while (k--) {
-            int x, y;
-            std::cin >> x >> y;
-            map[y][x] = true;
-        }
-
-        for(int x = 0; x < n; ++x) {
-            for(int y = 0; y < m; ++y) {
-                if(map[x][y] && !visited[x][y]) {
-                    ++cnt;
-                    bfs(x, y);
-                }
+   fastio;
+   cin >> t;
+   while(t--) {
+    input();
+    for(int i = 0; i < m; i++) {
+        for(int j = 0; j < n; j++) {
+            if(farm[i][j]) {
+                ++cnt;
+                dfs(i, j);
             }
         }
-
-        std::cout << cnt << endl;
     }
-
-    return 0;
+    cout << cnt << endl;
+   }
 }
