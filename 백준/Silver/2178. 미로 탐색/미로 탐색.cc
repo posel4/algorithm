@@ -1,66 +1,84 @@
-// NOTE-YME) 처음에 DFS로 푸니까 계속 시간 초과. 최단 거리 찾기는 BFS로!
-
 #include <iostream>
+#include <algorithm>
+#include <string>
+#include <climits>
 #include <queue>
-
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 #define endl "\n"
 #define MAX 100
 
-std::string map[MAX];
-bool discovered[MAX][MAX] = {false};
-int dist[101][101] = { 1, }; // distance from the start
+using namespace std;
+
+int map[MAX][MAX];
+int visited[MAX][MAX];
+int n, m, ans = INT_MAX;
+
 int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0, -1 };
+int dy[4] = { 0, 1,  0, -1 };
 
-void bfs(int n, int m) {
-    discovered[0][0] = true;
-    std::queue<std::pair<int, int>> q;
-    q.push(std::make_pair(0, 0));
+struct pos {
+	int x;
+	int y;
+	int cnt;
+};
 
-    while(!q.empty()) {
-        std::pair<int, int> here = q.front();
-        q.pop();
+void bfs(pos start) {
+	queue<pos> q;
 
-        int hx = here.first;
-        int hy = here.second;
+	q.push(start);
 
-        // down / right / up / left
-        for (int i = 0; i < 4; i++)
-        {
-            std::pair<int, int> there = std::make_pair(hx + dx[i], hy + dy[i]);
-            int tx = there.first;
-            int ty = there.second;
+	int sx = start.x;
+	int sy = start.y;
+	visited[sx][sy] = true;
 
-            if (0 <= tx && tx < n && 0 <= ty && ty < m)
-            {
-                if (map[tx][ty] == '1' && !discovered[tx][ty])
-                {
-                    dist[tx][ty] = dist[hx][hy] + 1;
-                    discovered[tx][ty] = true;
-                    q.push(std::make_pair(tx, ty));
-                }
+	while (!q.empty()) {
+		pos here = q.front();
+		int x = here.x;
+		int y = here.y;
+		int cnt = here.cnt;
+		q.pop();
 
-            }
+		if (x == n - 1 && y == m - 1) {
+			ans = cnt < ans ? cnt : ans;
+			continue;
+		}
 
-        }
-    }
+		for (int i = 0; i < 4; i++) {
+			int nx = x + dx[i];
+			int ny = y + dy[i];
+			if (0 <= nx && nx < n && 0 <= ny && ny < m && map[nx][ny] && !visited[nx][ny]) {
+				visited[nx][ny] = true;
+				q.push({ nx, ny, cnt + 1 });
+			}
+		}
+	}
+
+
+
+}
+
+void clear() {
+	fill(&map[0][0], &map[0][0] + MAX * MAX, 0);
+	fill(&visited[0][0], &visited[0][0] + MAX * MAX, 0);
+	ans = INT_MAX;
+}
+
+void input() {
+	cin >> n >> m;
+	for (int i = 0; i < n; i++) {
+		string s;
+		cin >> s;
+		for (int j = 0; j < s.size(); j++) {
+			map[i][j] = s.at(j) - '0';
+		}
+	}
 }
 
 int main() {
-    std::ios_base::sync_with_stdio(false);
-    std::cin.tie(0);
-    std::cout.tie(0);
-
-    int n, m;
-    std::cin >> n >> m;
-
-    for(int i = 0; i < n; ++i) {
-        std::cin >> map[i];
-    }
-
-    bfs(n, m);
-
-    std::cout << dist[n - 1][m - 1] << endl;
-
-    return 0;
+	fastio;
+	clear();
+	input();
+	bfs({ 0, 0, 1 });
+	cout << ans;
+	return 0;
 }
