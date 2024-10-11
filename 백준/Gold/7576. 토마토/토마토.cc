@@ -1,70 +1,67 @@
 #include <iostream>
 #include <queue>
-
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 #define MAX 1001
 
-struct tomato {
-    int y, x;
+using namespace std;
+
+struct pos {
+    int x, y, day;
 };
 
-std::queue<tomato> q;
+int n, m, ans;
+queue<pos> q;
+int tomato[MAX][MAX];
+int dx[4] = { 1, -1, 0, 0 };
+int dy[4] = { 0, 0, 1, -1 };
 
-int dx[4] = { 1, 0, -1, 0 };
-int dy[4] = { 0, 1, 0 , -1 };
-
-int n, m, result = 0;
-int graph[MAX][MAX];
-
-bool is_map(int there_y, int there_x) {
-    return (0 <= there_x && 0 <= there_y && there_x < m && there_y < n);
-}
-
-void bfs(void) {
+void bfs() {
     while (!q.empty()) {
-        int y = q.front().y;
-        int x = q.front().x;
+        pos here = q.front();
         q.pop();
 
-        for (int i = 0; i < 4; i++) {
-            int there_y = y + dy[i];
-            int there_x = x + dx[i];
+        ans = here.day;
 
-            if (is_map(there_y, there_x) && graph[there_y][there_x] == 0) {
-                graph[there_y][there_x] = graph[y][x] + 1;
-                q.push({there_y, there_x });
+        for (int i = 0; i < 4; i++) {
+            int nx = here.x + dx[i];
+            int ny = here.y + dy[i];
+
+            if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
+            if (tomato[nx][ny] == 0) {
+                tomato[nx][ny] = 1;
+                q.push({ nx, ny, here.day + 1 });
+            }
+        }
+    }
+}
+
+void input() {
+    cin >> m >> n;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            cin >> tomato[i][j];
+            if (tomato[i][j] == 1) {
+                q.push({ i, j, 0 });
             }
         }
     }
 }
 
 int main() {
-    std::cin >> m >> n;
+    fastio;
 
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
-            std::cin >> graph[i][j];
-            if (graph[i][j] == 1) {
-                q.push({ i, j });
-            }
-        }
-    }
-
+    input();
     bfs();
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
-            // 다 돌았는데 익지 않은 토마토가 존재할 경우
-            if (graph[i][j] == 0) {
-                std::cout << -1;
+            if (tomato[i][j] == 0) {
+                cout << -1;
                 return 0;
-            }
-            // 토마토는 다 익었는데, 얼마만에 익었는지?
-            if (result < graph[i][j]) {
-                result = graph[i][j];
             }
         }
     }
 
-    std::cout << result - 1;
+    cout << ans;
     return 0;
 }
