@@ -1,25 +1,31 @@
 #include <iostream>
+#include <vector>
 #include <stack>
+#define fastio ios::sync_with_stdio(0), cin.tie(0), cout.tie(0)
+#define endl "\n"
+
 using namespace std;
 
 int main() {
-    int k, n;
-    cin >> k;
-    stack<int> s;
-    for (int i = 0; i < k; i++) {
-        cin >> n;
-        if (n != 0) {
-            s.push(n);
-        } else {
-            s.pop();
-        }
-    }
-    int sum = 0;
-    int size = s.size();
-    for (int i = 0; i < size; i++) {
-        sum += s.top();
-        s.pop();
-    }
-    cout << sum;
-    return 0;
+	fastio;
+
+	stack<int> s;
+	int k;
+	cin >> k;
+	while (k--) {
+		int n;
+		cin >> n;
+		if (!n && !s.empty()) s.pop();
+		else s.push(n);
+	}
+
+	int sum = 0;
+	while (!s.empty()) {
+		int n = s.top();
+		s.pop();
+		sum += n;
+	}
+	cout << sum;
+
+	return 0;
 }
